@@ -1,4 +1,6 @@
+import 'package:ecommerce/UI/product.dart';
 import 'package:flutter/material.dart';
+import 'package:carousel_pro/carousel_pro.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -28,10 +30,6 @@ class HomePage extends StatelessWidget {
             UserAccountsDrawerHeader(
               accountName: Text('Mai Hoang Long'),
               accountEmail: Text('mailonggit@gmail.com'),
-              // decoration: BoxDecoration(
-              //   shape: BoxShape.circle,
-              //   color: Colors.blue,
-              // ),
               currentAccountPicture: GestureDetector(
                 child: CircleAvatar(
                   child: Container(
@@ -59,6 +57,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
+      body: ProductPage(),      
     );
   }
 }
