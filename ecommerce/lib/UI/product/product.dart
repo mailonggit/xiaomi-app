@@ -1,6 +1,7 @@
-import 'package:ecommerce/UI/horizontalproduct.dart';
-import 'package:ecommerce/UI/recentproduct.dart';
-import 'package:ecommerce/UI/slideproduct.dart';
+
+import 'package:ecommerce/UI/product/horizontalproduct.dart';
+import 'package:ecommerce/UI/product/recentproduct.dart';
+import 'package:ecommerce/UI/product/slideproduct.dart';
 import 'package:flutter/material.dart';
 
 class ProductPage extends StatefulWidget {

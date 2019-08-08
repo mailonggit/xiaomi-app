@@ -1,3 +1,4 @@
+import 'package:ecommerce/UI/product/productdetails.dart';
 import 'package:flutter/material.dart';
 
 class RecentProduct extends StatefulWidget {
@@ -8,14 +9,14 @@ class RecentProduct extends StatefulWidget {
 class _RecentProductState extends State<RecentProduct> {
   var product_list = [
     {
-      'name' : 'Air Dots Pro',
-      'picture' :'assets/images/air-dots-pro.jpg',
+      'name': 'Air Dots Pro',
+      'picture': 'assets/images/air-dots-pro.jpg',
       'old_price': 100,
       'new_price': 82,
     },
     {
-      'name' : 'Smart Home',
-      'picture' :'assets/images/smart-home.jpg',
+      'name': 'Smart Home',
+      'picture': 'assets/images/smart-home.jpg',
       'old_price': 200,
       'new_price': 140,
     },
@@ -23,7 +24,7 @@ class _RecentProductState extends State<RecentProduct> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 200.0,
+        height: 250.0,
         child: GridView.count(
           crossAxisCount: 2,
           children: List.generate(product_list.length, (index) {
@@ -52,16 +53,40 @@ class SingleProduct extends StatelessWidget {
         tag: name,
         child: Material(
           child: InkWell(
-            child: GridTile(
-              child: Image.asset(picture, fit: BoxFit.cover,),
-              
+            onTap: (){
+              //passing value to product details page
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductDetails(
+                name: name,
+                picture: picture,
+                new_price: new_price,
+                old_price: old_price,              
+              )));
+            },
+            child: GridTile(              
+              child: Image.asset(
+                picture,
+                fit: BoxFit.cover,                
+              ),
               footer: Container(
+                height: 70.0,
                 color: Colors.white70,
                 child: ListTile(
                   leading: Text(name),
+                  title: Text(
+                    '${new_price.toString()}\$',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  subtitle: Text(
+                    '${old_price.toString()}\$',
+                    style: TextStyle(
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
                 ),
               ),
-              
             ),
           ),
         ),
