@@ -1,6 +1,6 @@
 import 'package:ecommerce/UI/product/product.dart';
+import 'package:ecommerce/UI/shoppingcart/cartpage.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -18,7 +18,9 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.shopping_cart),
             color: Colors.white,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Cart()));
+            },
           ),
         ],
         backgroundColor: Colors.green,
@@ -44,16 +46,34 @@ class HomePage extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: Text('Home'),
-              subtitle: Text('Back to homepage screen'),
+              title: Text('HomePage'),            
               leading: Icon(Icons.home),
             ),
+           ListTile(
+              title: Text('My Acount'),            
+              leading: Icon(Icons.person),
+            ),
             ListTile(
-              title: Text('Shopping Cart'),
-              subtitle: Text('See what product you choose to buy'),
+              title: Text('My Orders'),            
+              leading: Icon(Icons.shopping_basket),
+            ),
+            ListTile(
+              title: Text('Shopping Carts'),            
               leading: Icon(Icons.shopping_cart),
             ),
+            ListTile(
+              title: Text('Favorites'),            
+              leading: Icon(Icons.favorite),
+            ),
             Divider(),
+            ListTile(
+              title: Text('Settings'),            
+              leading: Icon(Icons.settings),
+            ),
+            ListTile(
+              title: Text('About'),            
+              leading: Icon(Icons.help),
+            ),
           ],
         ),
       ),

@@ -13,12 +13,28 @@ class _RecentProductState extends State<RecentProduct> {
       'picture': 'assets/images/air-dots-pro.jpg',
       'old_price': 100,
       'new_price': 82,
+      'script' : 'Dubbed AirDots Pro, the new earbuds come with designs nearly identical to the AirPods, including a Bluetooth-friendly carrying case that doubles as a charger to keep the AirDots charged. The AirDots themselves have a white finish and connect wirelessly to your phone. According to MacRumors, which earlier reported on the AirDots Pro, they come with four hours of battery life out of the box, and the case adds another 10 hours of charge.',
     },
     {
       'name': 'Smart Home',
       'picture': 'assets/images/smart-home.jpg',
       'old_price': 200,
       'new_price': 140,
+      'script' : 'This binding allows your openHAB to communicate with the Xiaomi Smart Home Suite. It consists of devices communicating over a ZigBee network with a ZigBee - WiFi gateway.The devices are very affordable and you can get them from your favourite chinese marktes like AliExpress or GearBest. The sensors run on a coincell battery for over a year.After setup, you can disconnect the gateway from the internet to keep your sensor information private.# Supported devices',
+    },
+     {
+      'name': 'Air Dots',
+      'picture': 'assets/images/air-dots.jpg',
+      'old_price': 70,
+      'new_price': 50,
+      'script' : 'Redmi AirDots Wireless Earbuds is designed with Bluetooth 5.0 support. It is packed with a built-in Realtek 8763 chip and can be used for bilateral calls and digital sound quality is assured with its DSP digital noise reduction.',
+    },
+     {
+      'name': 'Mi Wireless',
+      'picture': 'assets/images/mouse-wireless.jpg',
+      'old_price': 45,
+      'new_price': 27,
+      'script' : 'The design of the mouse is directly related to the comfort of your grip. Mi Wireless Mouse has a classic shape that is designed to maximize alignment with the contours of your hand. The design of the case is made in the shape of the palm to provide maximum convenience.',
     },
   ];
   @override
@@ -33,6 +49,7 @@ class _RecentProductState extends State<RecentProduct> {
               picture: product_list[index]['picture'],
               old_price: product_list[index]['old_price'],
               new_price: product_list[index]['new_price'],
+              script: product_list[index]['script'],
             );
           }),
         ));
@@ -40,11 +57,11 @@ class _RecentProductState extends State<RecentProduct> {
 }
 
 class SingleProduct extends StatelessWidget {
-  final name;
+  final name, script;
   final picture;
   final old_price, new_price;
 
-  SingleProduct({this.name, this.picture, this.old_price, this.new_price});
+  SingleProduct({this.name, this.picture, this.old_price, this.new_price, this.script});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +76,8 @@ class SingleProduct extends StatelessWidget {
                 name: name,
                 picture: picture,
                 new_price: new_price,
-                old_price: old_price,              
+                old_price: old_price, 
+                script: script,             
               )));
             },
             child: GridTile(              
