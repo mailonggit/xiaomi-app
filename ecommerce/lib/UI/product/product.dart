@@ -10,25 +10,14 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  categoryLabel(){
+
+  createLabel(String label, TextStyle textStyle){
     return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
             child: Text(
-              'Category',
-              style: TextStyle(fontSize: 15.0),
-              textScaleFactor: 1.2,
-            ),
-          ),
-        );
-  }
-  recentProductLabel() {
-    return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Text(
-              'Recent Product',
-              style: TextStyle(fontSize: 15.0),
+              label,
+              style: textStyle,
               textScaleFactor: 1.2,
             ),
           ),
@@ -41,11 +30,11 @@ class _ProductPageState extends State<ProductPage> {
 
         SlideProduct(),
 
-        categoryLabel(),
+        createLabel('Category', TextStyle(color: Colors.pink, fontSize: 15.0, fontWeight: FontWeight.w700)),
 
         HorizontalProduct(),
 
-        recentProductLabel(),
+        createLabel('Recent Product', TextStyle(color: Colors.pink, fontSize: 15.0, fontWeight: FontWeight.w700)),
         
         RecentProduct(),
       ],

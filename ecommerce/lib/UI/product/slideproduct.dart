@@ -6,6 +6,7 @@ class SlideProduct extends StatefulWidget {
 }
 
 class _SlideProductState extends State<SlideProduct> {
+  String path = 'assets/images';
   @override
   Widget build(BuildContext context) {
    return Container(
@@ -13,11 +14,11 @@ class _SlideProductState extends State<SlideProduct> {
       child: Carousel(
         boxFit: BoxFit.fitHeight,
         images: [
-          AssetImage('assets/images/product-1.jpg'),
-          AssetImage('assets/images/product-2.jpg'),
-          AssetImage('assets/images/product-3.jpg'),
-          AssetImage('assets/images/product-4.jpg'),
-          AssetImage('assets/images/product-5.jpg'),
+          AssetImage('$path/product-1.jpg'),
+          AssetImage('$path/product-2.jpg'),
+          AssetImage('$path/product-3.jpg'),
+          AssetImage('$path/product-4.jpg'),
+          AssetImage('$path/product-5.jpg'),
         ],
         dotSize: 5.0,
         dotSpacing: 10.0,

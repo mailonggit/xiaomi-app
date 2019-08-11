@@ -1,6 +1,5 @@
+import 'package:ecommerce/UI/page/login.dart';
 import 'package:flutter/material.dart';
-
-import 'UI/homepage.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),      
-      home: HomePage(),
+      home: Login(),
     );
   }
 }

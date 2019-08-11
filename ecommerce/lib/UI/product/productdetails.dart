@@ -6,12 +6,63 @@ class ProductDetails extends StatefulWidget {
   final new_price;
   final old_price;
   final script;
-  ProductDetails({this.name, this.picture, this.new_price, this.old_price, this.script});
+  ProductDetails(
+      {this.name, this.picture, this.new_price, this.old_price, this.script});
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  //custom label here
+  createLabel(String label, TextStyle textStyle) {
+    return Center(
+        child: Text(
+      label,
+      style: textStyle,
+    ));
+  }
+
+  //custom notification here
+  //______________
+  //|Notification |
+  //|Message      |
+  //|             |
+  //|_______Button|
+
+  createButtonAndNotification(
+      String header, String message, String button, String type) {
+    return Expanded(
+      child: MaterialButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(header),
+                  content: Text(message),
+                  actions: <Widget>[
+                    MaterialButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(button),
+                    ),
+                  ],
+                );
+              });
+        },        
+
+        //create button
+        child: Row(
+          children: <Widget>[
+            Expanded(child: Text(type)),
+            Expanded(child: Icon(Icons.arrow_drop_down)),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +80,6 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
       body: ListView(
         children: <Widget>[
-          
-          
           Container(
             height: 300.0,
             color: Colors.white,
@@ -86,108 +135,21 @@ class _ProductDetailsState extends State<ProductDetails> {
             ),
           ),
           ListTile(
-            title: Center(child: Text('Product Details', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w800))),
+            title: createLabel('Product Details',
+                TextStyle(fontSize: 15.0, fontWeight: FontWeight.w700)),
             subtitle: Text(widget.script),
-            
           ),
           Divider(),
-          
-          //list of button          
+
+          //list of button
           Row(
             children: <Widget>[
-              //size button
-              Expanded(
-                child: MaterialButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context){
-                        return AlertDialog(
-                          title: Text('Notification'),
-                          content: Text('Please choose your size'),
-                          actions: <Widget>[
-                            MaterialButton(
-                              onPressed: (){
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('Close'),
-                            ),
-                          ],                 
-                        );
-                      }
-                    );
-                  },
-                  textColor: Colors.black,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: Text('Size')),
-                      Expanded(child: Icon(Icons.arrow_drop_down)),
-                    ],
-                  ),
-                ),
-              ),
-              //Color button
-              Expanded(
-                child: MaterialButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context){
-                        return AlertDialog(
-                          title: Text('Notification'),
-                          content: Text('Please choose your color'),
-                          actions: <Widget>[
-                            MaterialButton(
-                              onPressed: (){
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('Close'),
-                            ),
-                          ],                 
-                        );
-                      }
-                    );
-                  },
-                  textColor: Colors.black,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: Text('Color')),
-                      Expanded(child: Icon(Icons.arrow_drop_down)),
-                    ],
-                  ),
-                ),
-              ),
-              //Qty button
-              Expanded(
-                child: MaterialButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context){
-                        return AlertDialog(
-                          title: Text('Notification'),
-                          content: Text('Please choose your Qty'),
-                          actions: <Widget>[
-                            MaterialButton(
-                              onPressed: (){
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('Close'),
-                            ),
-                          ],                 
-                        );
-                      }
-                    );
-                  },
-                  textColor: Colors.black,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: Text('Qty')),
-                      Expanded(child: Icon(Icons.arrow_drop_down)),
-                    ],
-                  ),
-                ),
-              ),
+              createButtonAndNotification(
+                  'Notification', 'Please Choose your size', 'Close', 'Size'),
+              createButtonAndNotification(
+                  'Notification', 'Please Choose your color', 'Close', 'Color'),
+              createButtonAndNotification('Notification',
+                  'Please Choose your quantity', 'Close', 'Quantity'),
             ],
           ),
           //purchase, add to cart and favorite button
@@ -213,10 +175,12 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
             ],
           ),
-           
+
           Divider(),
 
-          Center(child: Text('Similar Product', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w800),)),
+          Center(
+              child: createLabel('Similar Product',
+                  TextStyle(fontSize: 15.0, fontWeight: FontWeight.w700))),
           //similar product
           Container(
             height: 360.0,
@@ -240,28 +204,32 @@ class _SimilarProductState extends State<SimilarProduct> {
       'picture': 'assets/images/air-dots-pro.jpg',
       'old_price': 100,
       'new_price': 82,
-      'script' : 'Dubbed AirDots Pro, the new earbuds come with designs nearly identical to the AirPods, including a Bluetooth-friendly carrying case that doubles as a charger to keep the AirDots charged. The AirDots themselves have a white finish and connect wirelessly to your phone. According to MacRumors, which earlier reported on the AirDots Pro, they come with four hours of battery life out of the box, and the case adds another 10 hours of charge.',
+      'script':
+          'Dubbed AirDots Pro, the new earbuds come with designs nearly identical to the AirPods, including a Bluetooth-friendly carrying case that doubles as a charger to keep the AirDots charged. The AirDots themselves have a white finish and connect wirelessly to your phone. According to MacRumors, which earlier reported on the AirDots Pro, they come with four hours of battery life out of the box, and the case adds another 10 hours of charge.',
     },
     {
       'name': 'Smart Home',
       'picture': 'assets/images/smart-home.jpg',
       'old_price': 200,
       'new_price': 140,
-      'script' : 'This binding allows your openHAB to communicate with the Xiaomi Smart Home Suite. It consists of devices communicating over a ZigBee network with a ZigBee - WiFi gateway.The devices are very affordable and you can get them from your favourite chinese marktes like AliExpress or GearBest. The sensors run on a coincell battery for over a year.After setup, you can disconnect the gateway from the internet to keep your sensor information private.# Supported devices',
+      'script':
+          'This binding allows your openHAB to communicate with the Xiaomi Smart Home Suite. It consists of devices communicating over a ZigBee network with a ZigBee - WiFi gateway.The devices are very affordable and you can get them from your favourite chinese marktes like AliExpress or GearBest. The sensors run on a coincell battery for over a year.After setup, you can disconnect the gateway from the internet to keep your sensor information private.# Supported devices',
     },
-     {
+    {
       'name': 'Air Dots',
       'picture': 'assets/images/air-dots.jpg',
       'old_price': 70,
       'new_price': 50,
-      'script' : 'Redmi AirDots Wireless Earbuds is designed with Bluetooth 5.0 support. It is packed with a built-in Realtek 8763 chip and can be used for bilateral calls and digital sound quality is assured with its DSP digital noise reduction.',
+      'script':
+          'Redmi AirDots Wireless Earbuds is designed with Bluetooth 5.0 support. It is packed with a built-in Realtek 8763 chip and can be used for bilateral calls and digital sound quality is assured with its DSP digital noise reduction.',
     },
-     {
+    {
       'name': 'Mi Wireless',
       'picture': 'assets/images/mouse-wireless.jpg',
       'old_price': 45,
       'new_price': 27,
-      'script' : 'The design of the mouse is directly related to the comfort of your grip. Mi Wireless Mouse has a classic shape that is designed to maximize alignment with the contours of your hand. The design of the case is made in the shape of the palm to provide maximum convenience.',
+      'script':
+          'The design of the mouse is directly related to the comfort of your grip. Mi Wireless Mouse has a classic shape that is designed to maximize alignment with the contours of your hand. The design of the case is made in the shape of the palm to provide maximum convenience.',
     },
   ];
   @override
@@ -288,7 +256,8 @@ class SimilarSingleProduct extends StatelessWidget {
   final picture;
   final old_price, new_price;
 
-  SimilarSingleProduct({this.name, this.picture, this.old_price, this.new_price, this.script});
+  SimilarSingleProduct(
+      {this.name, this.picture, this.old_price, this.new_price, this.script});
 
   @override
   Widget build(BuildContext context) {
@@ -297,20 +266,23 @@ class SimilarSingleProduct extends StatelessWidget {
         tag: name,
         child: Material(
           child: InkWell(
-            onTap: (){
+            onTap: () {
               //passing value to product details page
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductDetails(
-                name: name,
-                picture: picture,
-                new_price: new_price,
-                old_price: old_price, 
-                script: script,             
-              )));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProductDetails(
+                            name: name,
+                            picture: picture,
+                            new_price: new_price,
+                            old_price: old_price,
+                            script: script,
+                          )));
             },
-            child: GridTile(              
+            child: GridTile(
               child: Image.asset(
                 picture,
-                fit: BoxFit.cover,                
+                fit: BoxFit.cover,
               ),
               footer: Container(
                 height: 70.0,
