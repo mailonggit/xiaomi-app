@@ -1,4 +1,5 @@
 import 'package:ecommerce/UI/page/homepage.dart';
+import 'package:ecommerce/UI/page/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,59 +13,243 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  SharedPreferences preferences;
+  final formKey = GlobalKey<FormState>();
+  TextEditingController txt_email = TextEditingController();
+  TextEditingController txt_pass = TextEditingController();
+  bool loading = false, isLogedIn = false;
 
-  String name, email, imageUrl;
+  @override
+  void initState() {
+    super.initState();
+    isSignedIn();
+  }
 
-  Future<String> signInWithGoogle() async {
-    final GoogleSignInAccount account = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await account.authentication;
+  void isSignedIn() async {
+    setState(() {
+      loading = true;
+    });
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
-    );
+    preferences = await SharedPreferences.getInstance();
 
-    final FirebaseUser user = await auth.signInWithCredential(credential);
+    isLogedIn = await googleSignIn.isSignedIn();
 
-    //check if email and name is null
+    if (isLogedIn) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    }
 
-    name = user.displayName;
-    email = user.email;
-    imageUrl = user.photoUrl;
+    //after login => stop loading
+    setState(() {
+      loading = false;
+    });
+  }
 
-    final FirebaseUser currentUser = await auth.currentUser();
+  Future signInWithGoogle() async {
+    preferences = await SharedPreferences.getInstance(); //previous data
 
-    return 'Sign In Succeeded: $user';
+    setState(() {
+      loading = true;
+    });
+
+    //sign in part
+    GoogleSignInAccount account = await googleSignIn.signIn();
+
+    GoogleSignInAuthentication authentication = await account.authentication;
+
+    AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: authentication.accessToken,
+        idToken: authentication.idToken);
+
+    FirebaseUser firebaseUser =
+        await firebaseAuth.signInWithCredential(credential);
+
+    if (firebaseUser != null) {
+      final QuerySnapshot result = await Firestore.instance
+          .collection("users")
+          .where("id", isEqualTo: firebaseUser.uid)
+          .getDocuments();
+
+      final List<DocumentSnapshot> documents = result.documents;
+      //list empty
+      if (documents.length == 0) {
+        //insert user to collection
+        Firestore.instance
+            .collection("users")
+            .document(firebaseUser.uid)
+            .setData({
+          "id": firebaseUser.uid,
+          "username": firebaseUser.displayName,
+          "profilePicture": firebaseUser.photoUrl,
+        });
+        await preferences.setString("id", firebaseUser.uid);
+        await preferences.setString("username", firebaseUser.displayName);
+        await preferences.setString("photoUrl", firebaseUser.displayName);
+      } else {
+        await preferences.setString("id", documents[0]["id"]);
+        await preferences.setString("username", documents[0]["username"]);
+        await preferences.setString("photoUrl", documents[0]["phoyoUrl"]);
+      }
+
+      Fluttertoast.showToast(msg: "Login was successful");
+      setState(() {
+        loading = false;
+      });
+
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    } else {
+      Fluttertoast.showToast(msg: "Login Failed! Please login again");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 50.0,
-            ),
-            signInButton(),
-          ],
-        ),
+      appBar: AppBar(
+        title: Text('Login'),
       ),
-    );
-  }
-
-  signInButton() {
-    return OutlineButton(
-      splashColor: Colors.grey,
-      onPressed: (){
-        signInWithGoogle().whenComplete((){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
-        });
-      },
+      body: Column(
+        children: <Widget>[
+          Visibility(
+            visible: loading ?? true,
+            child: Container(
+              alignment: Alignment.center,
+              color: Colors.white,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: <Widget>[
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.white.withOpacity(0.5),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: "Email",
+                            icon: Icon(Icons.email),
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          controller: txt_email,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "The password cannot be empty";
+                            } else if (value.length < 6) {
+                              return "The password must be at least 6 characters long";
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.white.withOpacity(0.5),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: "Password",
+                            icon: Icon(Icons.lock),
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          controller: txt_email,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "The password cannot be empty";
+                            } else if (value.length < 6) {
+                              return "The password must be at least 6 characters long";
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.blue,
+                        child: MaterialButton(
+                          onPressed: () {},
+                          minWidth: MediaQuery.of(context).size.width,
+                          child: Text(
+                            'Login',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: FlatButton(
+                      child: Text('Forgot Password'),
+                      onPressed: () {},
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text("Don't have an account? Click here to",),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: FlatButton(
+                            child: Text(
+                              'Sign Up!',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  color: Colors.red, fontWeight: FontWeight.w700),
+                            ),
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+                            },
+                            
+                          ),
+                      ),
+                      
+                    ],
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Center(child: Text("Other Login Option")),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.red,
+                        child: MaterialButton(
+                          onPressed: () {},
+                          minWidth: MediaQuery.of(context).size.width,
+                          child: Text(
+                            'Sign in with Google',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
