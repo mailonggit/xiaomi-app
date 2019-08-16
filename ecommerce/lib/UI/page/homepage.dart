@@ -3,36 +3,7 @@ import 'package:ecommerce/UI/product/product.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  //Custom button from drawer widget
-  featureButton(String feature_name, Icon icon_name) {
-    return ListTile(
-      title: Text(
-        feature_name,
-      ),
-      leading: icon_name,
-      onTap: (){},
-    );
-  }
-
-  headerAccount() {
-    return UserAccountsDrawerHeader(
-      accountName: Text('Mai Hoang Long'),
-      accountEmail: Text('mailonggit@gmail.com'),
-      currentAccountPicture: GestureDetector(
-        child: CircleAvatar(
-          child: Container(
-            width: 100.0,
-            height: 100.0,
-            child: Image.asset(
-              'assets/images/avatar.jpg',
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,19 +11,10 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         title: Text('Product'),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            color: Colors.white,
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.shopping_cart),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Cart()));
-            },
-          ),
+          
+          appbarButton(Icon(Icons.search), Colors.white),
+
+          appbarButton(Icon(Icons.shopping_cart), Colors.white),
         ],
         backgroundColor: Colors.orange,
         elevation: 3.0,
@@ -86,5 +48,47 @@ class HomePage extends StatelessWidget {
       ),
       body: ProductPage(),
     );
+  }
+  featureButton(String feature_name, Icon icon_name) {
+    return ListTile(
+      title: Text(
+        feature_name,
+      ),
+      leading: icon_name,
+      onTap: (){},
+    );
+  }
+
+  headerAccount() {
+    return UserAccountsDrawerHeader(
+      accountName: Text('Mai Hoang Long'),
+      accountEmail: Text('mailonggit@gmail.com'),
+      currentAccountPicture: GestureDetector(
+        child: CircleAvatar(
+          child: Container(
+            width: 100.0,
+            height: 100.0,
+            child: Image.asset(
+              'assets/images/avatar.jpg',
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  appbarButton(icon_name, color_button, {context}){
+    return IconButton(
+            icon: icon_name,
+            color: color_button,
+            onPressed: () {
+              if(icon_name == Icon(Icons.shopping_cart)){
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Cart()));      
+              }
+            },
+          );
+          
   }
 }
